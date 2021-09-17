@@ -1,12 +1,12 @@
 # rust-openssl-hkdf
 
-Additional wrapper to add support for HKDF using rust-openssl. Used as a temporary bridge until rust-openssl releases a new official version that supports this functionality along with support for OpenSSL 3.0. See PR [here](https://github.com/sfackler/rust-openssl/pull/1498). 
+Additional wrapper to add support for HKDF using [rust-openssl](https://github.com/sfackler/rust-openssl). Used as a temporary bridge until rust-openssl releases a new official version that supports this functionality along with support for OpenSSL 3.0. See PR [here](https://github.com/sfackler/rust-openssl/pull/1498). 
 
 See [Documentation](https://crates.io/crates/openssl-hkdf) for usage.
 
 ## Warning
 
-**Unlike rust-openssl, this library only works with OpenSSL 1.1.1, it will not be able to link against older versions or OpenSSL 3.0.0.**
+**Unlike [rust-openssl](https://github.com/sfackler/rust-openssl), this library only works with OpenSSL 1.1.1, it will not be able to link against older versions or OpenSSL 3.0.0.**
 
 ## License
 
