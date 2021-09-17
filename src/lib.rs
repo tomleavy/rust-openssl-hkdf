@@ -1,4 +1,3 @@
-#[allow(non_snake_case)]
-
-mod sys;
 pub mod hkdf;
+#[allow(non_snake_case)]
+mod sys;

@@ -1,9 +1,9 @@
 //! HKDF derivation
+use crate::sys as ffi;
+use core::ptr;
 use openssl::error::ErrorStack;
 use openssl::hash::MessageDigest;
-use core::ptr;
 use std::os::raw::{c_int, c_uchar};
-use crate::sys as ffi;
 
 fn cvt_p<T>(r: *mut T) -> Result<*mut T, ErrorStack> {
     if r.is_null() {
@@ -40,9 +40,9 @@ impl HkdfDeriver {
                 ffi::EVP_PKEY_HKDF,
                 ptr::null_mut(),
             ))
-                .map(|p| HkdfDeriver(p))
-                .and_then(|ctx| cvt(openssl_sys::EVP_PKEY_derive_init(ctx.0)).map(|_| ctx))
-                .and_then(|ctx| cvt(ffi::EVP_PKEY_CTX_set_hkdf_md(ctx.0, digest.as_ptr())).map(|_| ctx))
+            .map(HkdfDeriver)
+            .and_then(|ctx| cvt(openssl_sys::EVP_PKEY_derive_init(ctx.0)).map(|_| ctx))
+            .and_then(|ctx| cvt(ffi::EVP_PKEY_CTX_set_hkdf_md(ctx.0, digest.as_ptr())).map(|_| ctx))
         }
     }
 
@@ -121,12 +121,16 @@ impl HkdfDeriver {
     fn derive(&mut self, buf: &mut [u8]) -> Result<usize, ErrorStack> {
         unsafe {
             let mut len = buf.len();
-            cvt(openssl_sys::EVP_PKEY_derive(self.0, buf.as_mut_ptr(), &mut len))?;
+            cvt(openssl_sys::EVP_PKEY_derive(
+                self.0,
+                buf.as_mut_ptr(),
+                &mut len,
+            ))?;
             Ok(len)
         }
     }
 
-    /// Execute the HKDF key derivation function in expand-only mode, filling the buffer
+    /// Execute the HKDF key derivation function in expand-only mode
     ///
     /// This corresponds to [`EVP_PKEY_CTX_hkdf_mode`] and [`EVP_PKEY_derive`].
     ///
@@ -157,7 +161,11 @@ impl HkdfDeriver {
         self.set_mode(ffi::EVP_PKEY_HKDEF_MODE_EXTRACT_ONLY)?;
 
         unsafe {
-            cvt(openssl_sys::EVP_PKEY_derive(self.0, ptr::null_mut(), &mut len))?;
+            cvt(openssl_sys::EVP_PKEY_derive(
+                self.0,
+                ptr::null_mut(),
+                &mut len,
+            ))?;
         }
 
         let mut buf = vec![0u8; len];
@@ -165,7 +173,7 @@ impl HkdfDeriver {
         Ok(buf)
     }
 
-    /// Execute the HKDF key derivation function in extract-and-expand mode, filling the buffer
+    /// Execute the HKDF key derivation function in extract-and-expand mode
     ///
     /// This corresponds to [`EVP_PKEY_CTX_hkdf_mode`] and [`EVP_PKEY_derive`].
     ///
@@ -191,7 +199,7 @@ impl Drop for HkdfDeriver {
     }
 }
 
-/// One-shot HKDF expand, filling the buffer
+/// One-shot HKDF expand
 pub fn hkdf_expand(
     digest: MessageDigest,
     key: &[u8],
@@ -212,7 +220,7 @@ pub fn hkdf_extract(digest: MessageDigest, key: &[u8], salt: &[u8]) -> Result<Ve
     ctx.extract()
 }
 
-/// One-shot HKDF extract-and-expand, filling the buffer
+/// One-shot HKDF extract-and-expand
 pub fn hkdf(
     digest: MessageDigest,
     key: &[u8],

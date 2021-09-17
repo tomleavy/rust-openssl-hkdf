@@ -1,7 +1,7 @@
-use std::os::raw::c_int;
-use openssl_sys::{EVP_PKEY_CTX, EVP_PKEY_CTX_ctrl, EVP_MD};
-use std::ffi::c_void;
 use core::ptr;
+use openssl_sys::{EVP_PKEY_CTX_ctrl, EVP_MD, EVP_PKEY_CTX};
+use std::ffi::c_void;
+use std::os::raw::c_int;
 
 pub const EVP_PKEY_HKDF: c_int = 1036;
 pub const EVP_PKEY_ALG_CTRL: c_int = 0x1000;
