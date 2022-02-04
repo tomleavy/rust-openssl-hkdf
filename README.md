@@ -4,10 +4,6 @@ Additional wrapper to add support for HKDF using [rust-openssl](https://github.c
 
 See [Documentation](https://crates.io/crates/openssl-hkdf) for usage.
 
-## Warning
-
-**Unlike [rust-openssl](https://github.com/sfackler/rust-openssl), this library only works with OpenSSL 1.1.1, it will not be able to link against older versions or OpenSSL 3.0.0.**
-
 ## License
 
 ```

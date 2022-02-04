@@ -1,17 +1,17 @@
 [package]
 name = "openssl-hkdf"
-version = "0.1.1"
+version = "0.2.0"
 description = "OpenSSL HKDF functionality for the openssl crate"
 homepage = "https://github.com/tomleavy/rust-openssl-hkdf"
 authors = ["Tom Leavy <thomasleavy1@gmail.com>"]
-edition = "2018"
+edition = "2021"
 license = "Apache-2.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 openssl = "^0.10"
-openssl-sys = "^0.9"
+openssl-sys = "^0.9.72"
 
 [dev-dependencies]
 hex = "0.4.3"

@@ -1,8 +1,8 @@
 //! HKDF derivation
-use crate::sys as ffi;
 use core::ptr;
 use openssl::error::ErrorStack;
 use openssl::hash::MessageDigest;
+use openssl_sys as ffi;
 use std::os::raw::{c_int, c_uchar};
 
 fn cvt_p<T>(r: *mut T) -> Result<*mut T, ErrorStack> {
@@ -48,7 +48,7 @@ impl HkdfDeriver {
 
     fn set_mode(&mut self, mode: c_int) -> Result<(), ErrorStack> {
         unsafe {
-            cvt(ffi::EVP_PKEY_CTX_hkdf_mode(self.0, mode))?;
+            cvt(ffi::EVP_PKEY_CTX_set_hkdf_mode(self.0, mode))?;
         }
 
         Ok(())
